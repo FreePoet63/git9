@@ -1,8 +1,6 @@
 package pagetest;
 
 import io.qameta.allure.*;
-import listener.ListenerOZ;
-import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import settings.StartSettings;
 
