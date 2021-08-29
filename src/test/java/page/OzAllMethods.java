@@ -13,7 +13,6 @@ import static com.codeborne.selenide.Selenide.$$;
 import static settings.StartSettings.onPage;
 
 public class OzAllMethods {
-
     @Step
     public static void searchElementPage(String strg) {
         onPage(AtlasWEbPage.class).linkText(strg).click();
@@ -40,6 +39,6 @@ public class OzAllMethods {
         $(ele).shouldBe(Condition.visible, Duration.ofSeconds(15)).click();
         $$(onPage(CollectionPage.class).sitiesList()).shouldHave(exactTexts("Минск", "Брест", "Витебск",
                 "Гомель", "Гродно", "Могилев", "Бобруйск", "Пинск", "Полоцк", "Орша", "Молодечно",
-                "Барановичи", "Солигорск", "Борисов", "", "", "", "", "", "", "", "", "", "","" , "", "", ""));
+                "Барановичи", "Солигорск", "Борисов", "Лида", "", "", "", "", "", "", "", "", "", "", "","" , "", "", ""));
     }
 }

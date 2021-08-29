@@ -1,46 +1,49 @@
 package settings;
 
-import io.qameta.allure.Attachment;
 import io.qameta.atlas.webdriver.WebPage;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
+import listener.AllureLogger;
 import org.openqa.selenium.WebDriver;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import io.qameta.atlas.core.Atlas;
 import io.qameta.atlas.webdriver.WebDriverConfiguration;
-import org.junit.After;
-import org.junit.Before;
-import org.openqa.selenium.firefox.FirefoxDriver;
+
+import org.testng.annotations.*;
 import selectors.AtlasWEbPage;
 
-import java.util.concurrent.TimeUnit;
+import java.io.IOException;
+
+import static listener.ListenerOZ.saveLogOZ;
+import static listener.ListenerOZ.saveScreenshotPNG;
+import static methoddefault.MethodsToDefault.cleanFile;
+import static settings.Driver.openDriver;
+
 
 public class StartSettings {
     public static WebDriver driver;
     public static Atlas atlas;
 
-    @Before
+    @BeforeClass
     public void startDriver() {
-        WebDriverManager.firefoxdriver().setup();
-        driver = new FirefoxDriver();
-        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        AllureLogger.info("Opening OZ.by Website.");
+        driver = openDriver("Chrome");
         driver.manage().window().maximize();
         atlas = new Atlas(new WebDriverConfiguration(driver));
         onPage(AtlasWEbPage.class).open("https://oz.by/");
     }
 
-    @After
+    @AfterClass
     public void closeOz() {
-        screenshotPNG();
+        AllureLogger.info("Closed Website.");
+        saveScreenshotPNG();
+        try {
+            saveLogOZ();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        cleanFile();
         driver.quit();
     }
 
-    @Attachment(value = "screenshot", type = "image/png")
-    public byte[] screenshotPNG() {
-        return ((TakesScreenshot)driver).getScreenshotAs(OutputType.BYTES);
-    }
-
-    public static <T extends WebPage> T onPage(Class<T> page) {
+    public static  <T extends WebPage> T onPage(Class<T> page) {
         return atlas.create(driver, page);
     }
 }
